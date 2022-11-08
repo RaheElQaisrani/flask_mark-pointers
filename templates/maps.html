@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Leaflet Map</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://d19vzq90twjlae.cloudfront.net/leaflet-0.7/leaflet.css" />
+</head>
+<body>
+
+    <div id="map" style="width: 600px; height: 400px"></div>
+
+    <script src="https://d19vzq90twjlae.cloudfront.net/leaflet-0.7/leaflet.js">
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            function initMap() {
+                var latlng = {lat:44.305584 , lng:69.976561; // THIS IS CENTER OF THE MAP
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 10,
+                    center: latlng
+                });
+
+                google.maps.event.addListenerOnce(map, 'tilesloaded', addMarkers);
+
+                function addMarkers() {
+                    {% for datas in data %}
+                      var point = {lat: {{ datas['geometry']['coordinates'][0] }}, lng: {{ datas['geometry']['coordinates'][1] }} };
+                      var marker = new google.maps.Marker({
+                        position: point,
+                        map: map,
+                        title: '!'
+                    });
+                        {% endfor %}
+
+                    marker['infowindow'] = new google.maps.InfoWindow({
+                        content: '<div id="content" style="text-align: center"></div>'
+                    }); // info of the point
+
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
